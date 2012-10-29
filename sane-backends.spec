@@ -133,8 +133,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	libs -p /sbin/ldconfig
-%postun	libs -p /sbin/ldconfig
+%post	libs -p /usr/sbin/ldconfig
+%postun	libs -p /usr/sbin/ldconfig
 
 %files common -f %{name}.lang
 %defattr(644,root,root,755)
