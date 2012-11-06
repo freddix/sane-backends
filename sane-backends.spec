@@ -1,7 +1,7 @@
 Summary:	SANE - easy local and networked scanner access
 Name:		sane-backends
 Version:	1.0.23
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 #Source0:	https://alioth.debian.org/frs/download.php/3503/%{name}-%{version}.tar.gz
@@ -17,6 +17,7 @@ Patch0:		%{name}-mustek-path.patch
 Patch1:		%{name}-glibc27.patch
 Patch2:		%{name}-udev.patch
 Patch3:		%{name}-soname.patch
+Patch4:		%{name}-pc.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -93,6 +94,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -121,7 +123,10 @@ cd ..
 install %{SOURCE1} $RPM_BUILD_ROOT%{_aclocaldir}
 
 install -D tools/udev/libsane.rules \
-	$RPM_BUILD_ROOT/lib/udev/rules.d/65-libsane.rules
+	$RPM_BUILD_ROOT%{_prefix}/lib/udev/rules.d/65-libsane.rules
+
+install -D tools/sane-backends.pc \
+	$RPM_BUILD_ROOT%{_pkgconfigdir}/sane-backends.pc
 
 rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
@@ -145,7 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
 %dir %attr(775,root,usb) /var/lock/sane
-/lib/udev/rules.d/65-libsane.rules
+%{_prefix}/lib/udev/rules.d/65-libsane.rules
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
 %{_mandir}/man1/gamma4scanimage.1*
@@ -394,6 +399,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libsane.la
 %{_includedir}/sane
 %{_aclocaldir}/sane-backends.m4
+%{_pkgconfigdir}/*.pc
 
 %files libs
 %defattr(644,root,root,755)
