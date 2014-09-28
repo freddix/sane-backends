@@ -1,7 +1,7 @@
 Summary:	SANE - easy local and networked scanner access
 Name:		sane-backends
 Version:	1.0.23
-Release:	2
+Release:	3
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 #Source0:	https://alioth.debian.org/frs/download.php/3503/%{name}-%{version}.tar.gz
@@ -74,11 +74,32 @@ Requires:	%{name} = %{version}-%{release}
 %description gphoto2
 SANE backend for gphoto2 supported cameras.
 
+%package genesys
+Summary:	SANE backend for Genesys based USB flatbed scanners
+Group:		Applications/System
+Provides:	scanner-backend = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
+
+%description genesys
+The sane-genesys library implements a SANE (Scanner Access Now Easy)
+backend that provides access to USB flatbed scanners based on the
+Genesys GL646, GL841, GL843, GL847 and GL124 chips. At present, the
+following scanners are known to work with this backend:
+- Canon LiDE 35/40/50/60/100/110/200/210/700
+- Hewlett-Packard HP2300C/HP2400/HP3670/HP3690/G4010/G4050
+- Medion MD5345/MD6228/MD6274
+- Panasonic KV-SS080
+- Plustek OpticBook 3600
+- Pentax DSmobile 600
+- Syscan/Ambir DocketPORT 467/485/487/665/685
+- Visioneer OneTouch 7100/Strobe XP100 (rev3)/XP200/XP300/Roadwarrior
+- Xerox Travel Scanner 100, OneTouch 2400
+
 %package plustek
 Summary:	SANE Plustek backend
 Group:		Applications/System
 Provides:	scanner-backend = %{version}-%{release}
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description plustek
 SANE Plustek backend.
@@ -183,7 +204,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epson.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epson2.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/fujitsu.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/genesys.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/gt68xx.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp3900.conf
@@ -253,7 +273,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/sane/libsane-epson.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-epson2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-fujitsu.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp3500.so.*
@@ -336,7 +355,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/sane-epson.5*
 %{_mandir}/man5/sane-epson2.5*
 %{_mandir}/man5/sane-fujitsu.5*
-%{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
 %{_mandir}/man5/sane-hp3500.5*
@@ -413,6 +431,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
 %{_mandir}/man5/sane-gphoto2.5*
 
+%files genesys
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/genesys.conf
+%{_mandir}/man5/sane-genesys.5*
+
 %files plustek
 %defattr(644,root,root,755)
 %doc doc/plustek
@@ -422,20 +446,16 @@ rm -rf $RPM_BUILD_ROOT
 
 # unpackaged files
 %if 0
-/etc/sane.d/canon_pp.conf
-/etc/sane.d/mustek_pp.conf
+/etc/sane.d/kodakaio.conf
 /etc/sane.d/plustek_pp.conf
 /etc/sane.d/saned.conf
-/usr/lib/sane/libsane-canon_pp.so.1
-/usr/lib/sane/libsane-canon_pp.so.1.0.22
-/usr/lib/sane/libsane-mustek_pp.so.1
-/usr/lib/sane/libsane-mustek_pp.so.1.0.22
-/usr/lib/sane/libsane-plustek_pp.so.1
-/usr/lib/sane/libsane-plustek_pp.so.1.0.22
+/usr/lib64/sane/libsane-kodakaio.so.1
+/usr/lib64/sane/libsane-kodakaio.so.1.0.23
+/usr/lib64/sane/libsane-plustek_pp.so.1
+/usr/lib64/sane/libsane-plustek_pp.so.1.0.23
 /usr/sbin/saned
-/usr/share/man/man5/sane-canon_pp.5.gz
-/usr/share/man/man5/sane-mustek_pp.5.gz
+/usr/share/man/man5/sane-kodakaio.5.gz
 /usr/share/man/man5/sane-plustek_pp.5.gz
 /usr/share/man/man8/saned.8.gz
-%endif
+endif
 
