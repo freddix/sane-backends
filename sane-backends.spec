@@ -2,7 +2,7 @@
 Summary:	SANE - easy local and networked scanner access
 Name:		sane-backends
 Version:	1.0.25
-Release:	0.1
+Release:	0.2
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 #Source0:	https://alioth.debian.org/frs/download.php/3958/%{name}-%{version}.tar.gz
@@ -26,7 +26,7 @@ BuildRequires:	libgphoto2-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
-BuildRequires:	libusbx-devel
+BuildRequires:	libusb-devel
 BuildRequires:	pkg-config
 #BuildRequires:	texlive-dvips
 #BuildRequires:	texlive-latex
@@ -124,6 +124,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %configure \
 	--disable-static	\
 	--enable-avahi		\
+	--enable-libusb_1_0	\
 	--enable-pnm-backend	\
 	--enable-translations 	\
 	--with-gphoto2
