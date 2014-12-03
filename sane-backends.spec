@@ -1,24 +1,23 @@
 # based on PLD Linux spec git://git.pld-linux.org/packages/sane-backends.git
 Summary:	SANE - easy local and networked scanner access
 Name:		sane-backends
-Version:	1.0.24
-Release:	1
+Version:	1.0.25
+Release:	0.1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
+#Source0:	https://alioth.debian.org/frs/download.php/3958/%{name}-%{version}.tar.gz
 #
-# upstream tarball broken
 # git clone git://anonscm.debian.org/sane/sane-backends.git
 # git archive --format=tar --prefix=sane-backends-1.0.XX/ RELEASE_1_0_XX | xz -c > sane-backends-1.0.XX.tar.xz
-#Source0:	%{name}-%{version}.tar.xz
-Source0:	https://alioth.debian.org/frs/download.php/3958/%{name}-%{version}.tar.gz
-# Source0-md5:	d41d8cd98f00b204e9800998ecf8427e
+# git rev-parse --short HEAD for short version hash
+Source0:	%{name}-%{version}-bfdba71.tar.xz
+# Source0-md5:	e86b70e0edcc2f091b0b2697c2e862d1
 Source1:	%{name}.m4
 Patch0:		%{name}-mustek-path.patch
 Patch1:		%{name}-glibc27.patch
 Patch2:		%{name}-udev.patch
 Patch3:		%{name}-soname.patch
 Patch4:		%{name}-pc.patch
-Patch5:		%{name}-udev-hwdb.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -117,7 +116,6 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -454,15 +452,15 @@ rm -rf $RPM_BUILD_ROOT
 /etc/sane.d/saned.conf
 /etc/sane.d/v4l.conf
 /usr/lib64/sane/libsane-kodakaio.so.1
-/usr/lib64/sane/libsane-kodakaio.so.1.0.24
+/usr/lib64/sane/libsane-kodakaio.so.1.0.25
 /usr/lib64/sane/libsane-kvs40xx.so.1
-/usr/lib64/sane/libsane-kvs40xx.so.1.0.24
+/usr/lib64/sane/libsane-kvs40xx.so.1.0.25
 /usr/lib64/sane/libsane-mustek_usb2.so.1
-/usr/lib64/sane/libsane-mustek_usb2.so.1.0.24
+/usr/lib64/sane/libsane-mustek_usb2.so.1.0.25
 /usr/lib64/sane/libsane-plustek_pp.so.1
-/usr/lib64/sane/libsane-plustek_pp.so.1.0.24
+/usr/lib64/sane/libsane-plustek_pp.so.1.0.25
 /usr/lib64/sane/libsane-v4l.so.1
-/usr/lib64/sane/libsane-v4l.so.1.0.24
+/usr/lib64/sane/libsane-v4l.so.1.0.25
 /usr/sbin/saned
 /usr/share/man/man5/sane-kodakaio.5.gz
 /usr/share/man/man5/sane-kvs40xx.5.gz
