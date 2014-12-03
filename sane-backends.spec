@@ -1,23 +1,24 @@
+# based on PLD Linux spec git://git.pld-linux.org/packages/sane-backends.git
 Summary:	SANE - easy local and networked scanner access
 Name:		sane-backends
-Version:	1.0.23
-Release:	3
+Version:	1.0.24
+Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-#Source0:	https://alioth.debian.org/frs/download.php/3503/%{name}-%{version}.tar.gz
 #
 # upstream tarball broken
 # git clone git://anonscm.debian.org/sane/sane-backends.git
-# git archive --format=tar --prefix=sane-backends-1.0.23/ RELEASE_1_0_23 | xz -c > sane-backends-1.0.23.tar.xz
-#
-Source0:	%{name}-%{version}.tar.xz
-# Source0-md5:	fadf56a60f4776bfb24491f66b617cf5
+# git archive --format=tar --prefix=sane-backends-1.0.XX/ RELEASE_1_0_XX | xz -c > sane-backends-1.0.XX.tar.xz
+#Source0:	%{name}-%{version}.tar.xz
+Source0:	https://alioth.debian.org/frs/download.php/3958/%{name}-%{version}.tar.gz
+# Source0-md5:	d41d8cd98f00b204e9800998ecf8427e
 Source1:	%{name}.m4
 Patch0:		%{name}-mustek-path.patch
 Patch1:		%{name}-glibc27.patch
 Patch2:		%{name}-udev.patch
 Patch3:		%{name}-soname.patch
 Patch4:		%{name}-pc.patch
+Patch5:		%{name}-udev-hwdb.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -116,6 +117,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -131,11 +133,11 @@ mv -f acinclude.m4.tmp acinclude.m4
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_aclocaldir},%{_libexecdir},/var/lock/sane}
+install -d $RPM_BUILD_ROOT{%{_aclocaldir},%{_libexecdir}}
 
 cd tools
-./sane-desc -m udev+acl -s "../doc/descriptions:../doc/descriptions-external" \
-	-d0 > udev/libsane.rules
+./sane-desc -m udev+hwdb -s "../doc/descriptions:../doc/descriptions-external" -d0 > udev/libsane.rules
+./sane-desc -m hwdb -s "../doc/descriptions:../doc/descriptions-external" -d0 > udev/sane-backends.hwdb
 cd ..
 
 %{__make} install \
@@ -145,6 +147,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_aclocaldir}
 
 install -D tools/udev/libsane.rules \
 	$RPM_BUILD_ROOT%{_prefix}/lib/udev/rules.d/65-libsane.rules
+
+install -D tools/udev/sane-backends.hwdb \
+	$RPM_BUILD_ROOT%{_prefix}/lib/udev/hwdb.d/20-sane-backends.hwdb
 
 install -D tools/sane-backends.pc \
 	$RPM_BUILD_ROOT%{_pkgconfigdir}/sane-backends.pc
@@ -170,7 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
-%dir %attr(775,root,usb) /var/lock/sane
+%{_prefix}/lib/udev/hwdb.d/20-sane-backends.hwdb
 %{_prefix}/lib/udev/rules.d/65-libsane.rules
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
@@ -325,8 +330,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/sane/libsane-umax_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-xerox_mfp.so.*
 
-%dir %attr(775,root,usb) /var/lock/sane
-
 %{_mandir}/man1/gamma4scanimage.1*
 %{_mandir}/man1/sane-config.1*
 %{_mandir}/man1/sane-find-scanner.1*
@@ -449,13 +452,23 @@ rm -rf $RPM_BUILD_ROOT
 /etc/sane.d/kodakaio.conf
 /etc/sane.d/plustek_pp.conf
 /etc/sane.d/saned.conf
+/etc/sane.d/v4l.conf
 /usr/lib64/sane/libsane-kodakaio.so.1
-/usr/lib64/sane/libsane-kodakaio.so.1.0.23
+/usr/lib64/sane/libsane-kodakaio.so.1.0.24
+/usr/lib64/sane/libsane-kvs40xx.so.1
+/usr/lib64/sane/libsane-kvs40xx.so.1.0.24
+/usr/lib64/sane/libsane-mustek_usb2.so.1
+/usr/lib64/sane/libsane-mustek_usb2.so.1.0.24
 /usr/lib64/sane/libsane-plustek_pp.so.1
-/usr/lib64/sane/libsane-plustek_pp.so.1.0.23
+/usr/lib64/sane/libsane-plustek_pp.so.1.0.24
+/usr/lib64/sane/libsane-v4l.so.1
+/usr/lib64/sane/libsane-v4l.so.1.0.24
 /usr/sbin/saned
 /usr/share/man/man5/sane-kodakaio.5.gz
+/usr/share/man/man5/sane-kvs40xx.5.gz
+/usr/share/man/man5/sane-mustek_usb2.5.gz
 /usr/share/man/man5/sane-plustek_pp.5.gz
+/usr/share/man/man5/sane-v4l.5.gz
 /usr/share/man/man8/saned.8.gz
-endif
+%endif
 
